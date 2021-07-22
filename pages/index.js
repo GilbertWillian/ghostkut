@@ -29,13 +29,37 @@ function ProfileSidebar(props) {
   );
 }
 
+function ProfileRelationsBox(props) {
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {props.title} ({props.items.length})
+      </h2>
+      <ul>
+        {/* {props.items.map((itemAtual) => {
+          return (
+            <li key={itemAtual}>
+              <a href={`/users/${itemAtual}`}>
+                <img src={`https://github.com/${itemAtual}.png`} />
+                <span>{itemAtual}</span>
+              </a>
+            </li>
+          );
+        })} */}
+      </ul>
+    </ProfileRelationsBoxWrapper>
+  );
+}
+
 export default function Home() {
   const githubUser = "GilbertWillian";
-  const [comunidades, setComunidades] = React.useState([{
-    id: '1324213234281374',
-    title: 'Eu odeio acordar cedo', 
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
-  }]);
+  const [comunidades, setComunidades] = React.useState([
+    {
+      id: "1324213234281374",
+      title: "Eu odeio acordar cedo",
+      image: "https://alurakut.vercel.app/capa-comunidade-01.jpg",
+    },
+  ]);
   const pessoasFavoritas = [
     "filipedeschamps",
     "juunegreiros",
@@ -45,9 +69,22 @@ export default function Home() {
     "marcobrunodev",
   ];
 
+
+  const [seguidores, setSeguidores] = React.useState([]);
+  // 0 - Pegar o array de dados do Github
+  React.useEffect(() => {
+    fetch("https://api.github.com/users/GilbertWillian/followers")
+      .then((respostaDoServidor) => {
+        return respostaDoServidor.json();
+      })
+      .then((respostaCompleta) => {
+        setSeguidores(respostaCompleta);
+      }); 
+  }, []);
+
   return (
     <>
-      <AlurakutMenu />
+      <AlurakutMenu githubUser={githubUser} />
       <MainGrid>
         <div className="profileArea" style={{ gridArea: "profileArea" }}>
           <ProfileSidebar githubUser={githubUser} />
@@ -66,12 +103,11 @@ export default function Home() {
                 e.preventDefault();
                 const dadosDoForm = new FormData(e.target);
 
-
                 const comunidade = {
-                  id: new Date().toISOString(), 
-                  title: dadosDoForm.get('title'),
-                  image: dadosDoForm.get('image'),
-                }
+                  id: new Date().toISOString(),
+                  title: dadosDoForm.get("title"),
+                  image: dadosDoForm.get("image"),
+                };
                 setComunidades([...comunidades, comunidade]);
               }}
             >
@@ -100,10 +136,9 @@ export default function Home() {
           className="profileRelationsArea"
           style={{ gridArea: "profileRelationsArea" }}
         >
+          <ProfileRelationsBox title="Seguidores" items={seguidores} />
           <ProfileRelationsBoxWrapper>
-          <h2 className="smallTitle">
-              Comunidades ({comunidades.length})
-            </h2>
+            <h2 className="smallTitle">Comunidades ({comunidades.length})</h2>
             <ul>
               {comunidades.map((itemAtual) => {
                 return (
@@ -126,7 +161,7 @@ export default function Home() {
               {pessoasFavoritas.map((itemAtual) => {
                 return (
                   <li key={itemAtual}>
-                    <a href={`/users/${itemAtual}`} >
+                    <a href={`/users/${itemAtual}`}>
                       <img src={`https://github.com/${itemAtual}.png`} />
                       <span>{itemAtual}</span>
                     </a>
