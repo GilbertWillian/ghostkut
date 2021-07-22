@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import NextLink from 'next/link';
+import LogoGhostkut from '../img/logo-ghostkut.svg';
 
 const BASE_URL = 'http://alurakut.vercel.app/';
 const v = '1';
@@ -27,7 +28,7 @@ export function AlurakutMenu({ githubUser }) {
         <AlurakutMenu.Logo src={`${BASE_URL}/logo.svg`} />
 
         {/* Logo Ghostkut */}
-        {/* <AlurakutMenu.Logo src='../img/logo_ghostkut.png' /> */}
+        {/* <AlurakutMenu.Logo src={LogoGhostkut} /> */}
 
         <nav style={{ flex: 1 }}>
           {[{ name: 'Inicio', slug: '/'}, {name: 'Amigos', slug: '/amigos'}, {name: 'Comunidades', slug: '/comunidades'}].map((menuItem) => (
