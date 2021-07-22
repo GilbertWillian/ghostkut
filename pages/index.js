@@ -36,16 +36,16 @@ function ProfileRelationsBox(props) {
         {props.title} ({props.items.length})
       </h2>
       <ul>
-        {/* {props.items.map((itemAtual) => {
+        {props.items.map((itemAtual) => {
           return (
-            <li key={itemAtual}>
-              <a href={`/users/${itemAtual}`}>
-                <img src={`https://github.com/${itemAtual}.png`} />
-                <span>{itemAtual}</span>
+            <li key={itemAtual.login}>
+              <a href={`/users/${itemAtual.login}`}>
+                <img src={`https://github.com/${itemAtual.login}.png`} />
+                <span>{itemAtual.login}</span>
               </a>
             </li>
           );
-        })} */}
+        })}
       </ul>
     </ProfileRelationsBoxWrapper>
   );
@@ -73,7 +73,7 @@ export default function Home() {
   const [seguidores, setSeguidores] = React.useState([]);
   // 0 - Pegar o array de dados do Github
   React.useEffect(() => {
-    fetch("https://api.github.com/users/GilbertWillian/followers")
+    fetch(`https://api.github.com/users/${githubUser}/followers`)
       .then((respostaDoServidor) => {
         return respostaDoServidor.json();
       })
