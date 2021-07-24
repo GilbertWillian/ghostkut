@@ -1,4 +1,6 @@
 import React from "react";
+import nookies from "nookies";
+import jwt from "jsonwebtoken";
 import MainGrid from "../src/components/MainGrid";
 import Box from "../src/components/Box";
 import { ProfileRelationsBoxWrapper } from "../src/components/ProfileRelations";
@@ -30,29 +32,38 @@ function ProfileSidebar(props) {
 }
 
 function ProfileRelationsBox(props) {
+  // console.log(props)
+  const seguidores = props.items;
+  console.log(typeof seguidores);
+
   return (
     <ProfileRelationsBoxWrapper>
       <h2 className="smallTitle">
         {props.title} ({props.items.length})
       </h2>
+
       <ul>
-        {props.items.map((itemAtual) => {
-          return (
-            <li key={itemAtual.login}>
-              <a href={`/users/${itemAtual.login}`}>
-                <img src={`https://github.com/${itemAtual.login}.png`} />
-                <span>{itemAtual.login}</span>
-              </a>
-            </li>
-          );
-        })}
+        {seguidores.message === "Not Found" ? (
+          <p style={{fontSize: '12px'}}>Sem Seguidores</p>
+        ) : (
+          seguidores.map((itemAtual) => {
+            return (
+              <li key={itemAtual.login}>
+                <a href={`/users/${itemAtual.login}`}>
+                  <img src={`https://github.com/${itemAtual.login}.png`} />
+                  <span>{itemAtual.login}</span>
+                </a>
+              </li>
+            );
+          })
+        )}
       </ul>
     </ProfileRelationsBoxWrapper>
   );
 }
 
-export default function Home() {
-  const githubUser = "GilbertWillian";
+export default function Home(props) {
+  const githubUser = props.githubUser;
   const [comunidades, setComunidades] = React.useState([]);
   const pessoasFavoritas = [
     "filipedeschamps",
@@ -207,4 +218,33 @@ export default function Home() {
       </MainGrid>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = cookies.USER_TOKEN;
+  const { isAuthenticated } = await fetch(
+    "https://alurakut.vercel.app/api/auth",
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  ).then((resposta) => resposta.json());
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const { githubUser } = jwt.decode(token);
+  return {
+    props: {
+      githubUser,
+    }, // will be passed to the page component as props
+  };
 }
