@@ -1,8 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import NextLink from "next/link";
-import Image from "next/image";
-import LogoGhostkut from "../../public/logo-ghostkut.svg";
 
 const BASE_URL = "http://alurakut.vercel.app/";
 const v = "1";

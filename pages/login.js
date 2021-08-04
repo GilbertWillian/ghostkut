@@ -2,7 +2,6 @@ import React from "react";
 import { useRouter } from "next/router"; // Hook do Next
 import nookies from 'nookies'
 
-
 export default function LoginScreen() {
   const router = useRouter();
   const [githubUser, setGithubUser] = React.useState("GilbertWillian");
@@ -18,7 +17,8 @@ export default function LoginScreen() {
     >
       <div className="loginScreen">
         <section className="logoArea">
-          <img src="https://alurakut.vercel.app/logo.svg" />
+          {/* <img src="https://alurakut.vercel.app/logo.svg" /> */}
+          <img src="logo-ghostkut.png" />
 
           <p>
             <strong>Conecte-se</strong> aos seus amigos e familiares usando
